@@ -17,9 +17,18 @@ class Funcionario:
 
     def idade(self):
         data_nascimento_quebrada = self._data_nascimento.split("/")
-        ano_nascimento = data_nascimento_quebrada[-1]
-        ano_atual = date.today().year
-        return ano_atual - int(ano_nascimento)
+        dia_nasc = int(data_nascimento_quebrada[0])
+        mes_nasc = int(data_nascimento_quebrada[1])
+        ano_nasc = int(data_nascimento_quebrada[2])
+
+        hoje = date.today()
+
+        idade_calculada = hoje.year - ano_nasc
+
+        if (hoje.month, hoje.day) < (mes_nasc, dia_nasc):
+            idade_calculada -= 1
+
+        return idade_calculada
 
     def sobrenome(self):
         nome_quebrado = self._nome.strip().split(" ", 1)
