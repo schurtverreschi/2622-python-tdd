@@ -38,7 +38,9 @@ class TestFuncionario:
             (" Pessoa Teste ", "Teste"),
         ],
     )
-    def test_metodo_sobrenome_recebe_nome_retorna_sobrenome(self, nome, esperado):
+    def test_metodo_sobrenome_recebe_nome_completo_retorna_sobrenome(
+        self, nome, esperado
+    ):
         funcionario_test = Funcionario(nome, "13/10/2000", 1612)
         resultado = funcionario_test.sobrenome()
         assert resultado == esperado
