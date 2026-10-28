@@ -1,14 +1,35 @@
+from datetime import date
+
 import pytest
 
 from codigo.bytebank import Funcionario
 
 
 class TestFuncionario:
-    def test_metodo_idade_recebe_13_10_2000_retorna_26(self):
-        funcionario_test = Funcionario("Pessoa Teste", "13/10/2000", 1612)
+    @pytest.mark.parametrize(
+        "data_nascimento, idade_esperada, motivo",
+        [
+            ("01/01/2000", date.today().year - 2000, "Já fez aniversário este ano"),
+            (
+                "31/12/2000",
+                date.today().year - 2000 - 1,
+                "Ainda NÃO fez aniversário este ano",
+            ),
+        ],
+        ids=["ja_fez_aniversario", "nao_fez_aniversario"],
+    )
+    def test_metodo_idade_deve_retornar_idade_correta_considerando_dia_e_mes(
+        self, data_nascimento, idade_esperada, motivo
+    ):
+        # Given
+        funcionario_test = Funcionario("Pessoa Teste", data_nascimento, 1612)
+
+        # When
         resultado = funcionario_test.idade()
-        esperado = 26
-        assert resultado == esperado
+        esperado = idade_esperada
+
+        # Then
+        assert resultado == esperado, f"Falhou no cenário: {motivo}"
 
     @pytest.mark.parametrize(
         "nome, esperado",
