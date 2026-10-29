@@ -19,7 +19,7 @@ class TestFuncionario:
         ],
         ids=["ja_fez_aniversario", "nao_fez_aniversario"],
     )
-    def test_metodo_idade_deve_retornar_idade_correta_considerando_dia_e_mes(
+    def test_idade_deve_retornar_idade_correta_considerando_dia_e_mes(
         self, data_nascimento, idade_esperada, motivo
     ):
         # Given
@@ -39,9 +39,7 @@ class TestFuncionario:
             (" Pessoa Teste ", "Teste"),
         ],
     )
-    def test_metodo_sobrenome_recebe_nome_completo_retorna_sobrenome(
-        self, nome, esperado
-    ):
+    def test_sobrenome_recebe_nome_completo_retorna_sobrenome(self, nome, esperado):
         funcionario_test = Funcionario(nome, "13/10/2000", 1612)
         resultado = funcionario_test.sobrenome()
         assert resultado == esperado
@@ -72,7 +70,7 @@ class TestFuncionario:
         ],
         ids=["diretor_100k", "diretor_90k", "gerente_150k"],
     )
-    def test_metodo_decrescimo_salario_deve_reduzir_apenas_da_diretoria_se_mais_de_cem_mil(
+    def test_decrescimo_salario_deve_reduzir_apenas_da_diretoria_se_mais_de_cem_mil(
         self, nome, salario, esperado, motivo
     ):
         funcionario_test = Funcionario(nome, "13/10/1900", salario)
@@ -81,41 +79,40 @@ class TestFuncionario:
 
         assert resultado == esperado, f"Falhou no cenário: {motivo}"
 
-
-@pytest.mark.parametrize(
-    "salario, esperado, contexto_expectativa, motivo",
-    [
-        (
-            800,
-            80,
-            nullcontext(),
-            "Funcionário que recebe até mil reais tem direito ao bônus",
-        ),
-        (
-            1000,
-            100,
-            nullcontext(),
-            "Funcionário que recebe até mil reais tem direito ao bônus",
-        ),
-        (
-            1500,
-            None,
-            pytest.raises(
-                ValueError, match="Salário não se enquadra no critério do bônus"
+    @pytest.mark.parametrize(
+        "salario, esperado, contexto_expectativa, motivo",
+        [
+            (
+                800,
+                80,
+                nullcontext(),
+                "Funcionário que recebe até mil reais tem direito ao bônus",
             ),
-            "Funcionário que recebe acima de mil reais não tem direito ao bônus",
-        ),
-    ],
-    ids=[
-        "salario_800_recebe_bonus",
-        "salario_1000_recebe_bonus",
-        "salario_1500_nao_recebe_bonus",
-    ],
-)
-def test_metodo_calcular_bonus(salario, esperado, contexto_expectativa, motivo):
-    with contexto_expectativa:
-        funcionario = Funcionario("Pessoa Teste", "10/05/1994", salario)
-        resultado = funcionario.calcular_bonus()
+            (
+                1000,
+                100,
+                nullcontext(),
+                "Funcionário que recebe até mil reais tem direito ao bônus",
+            ),
+            (
+                1500,
+                None,
+                pytest.raises(
+                    ValueError, match="Salário não se enquadra no critério do bônus"
+                ),
+                "Funcionário que recebe acima de mil reais não tem direito ao bônus",
+            ),
+        ],
+        ids=[
+            "salario_800_recebe_bonus",
+            "salario_1000_recebe_bonus",
+            "salario_1500_nao_recebe_bonus",
+        ],
+    )
+    def test_calcular_bonus(salario, esperado, contexto_expectativa, motivo):
+        with contexto_expectativa:
+            funcionario = Funcionario("Pessoa Teste", "10/05/1994", salario)
+            resultado = funcionario.calcular_bonus()
 
-        if isinstance(contexto_expectativa, nullcontext):
-            assert resultado == esperado, f"Falhou no cenário: {motivo}"
+            if isinstance(contexto_expectativa, nullcontext):
+                assert resultado == esperado, f"Falhou no cenário: {motivo}"
