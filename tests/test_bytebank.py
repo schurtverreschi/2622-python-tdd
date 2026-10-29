@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from datetime import date
 
 import pytest
@@ -79,3 +80,42 @@ class TestFuncionario:
         resultado = funcionario_test.salario
 
         assert resultado == esperado, f"Falhou no cenário: {motivo}"
+
+
+@pytest.mark.parametrize(
+    "salario, esperado, contexto_expectativa, motivo",
+    [
+        (
+            800,
+            80,
+            nullcontext(),
+            "Funcionário que recebe até mil reais tem direito ao bônus",
+        ),
+        (
+            1000,
+            100,
+            nullcontext(),
+            "Funcionário que recebe até mil reais tem direito ao bônus",
+        ),
+        (
+            1500,
+            None,
+            pytest.raises(
+                ValueError, match="Salário não se enquadra no critério do bônus"
+            ),
+            "Funcionário que recebe acima de mil reais não tem direito ao bônus",
+        ),
+    ],
+    ids=[
+        "salario_800_recebe_bonus",
+        "salario_1000_recebe_bonus",
+        "salario_1500_nao_recebe_bonus",
+    ],
+)
+def test_metodo_calcular_bonus(salario, esperado, contexto_expectativa, motivo):
+    with contexto_expectativa:
+        funcionario = Funcionario("Pessoa Teste", "10/05/1994", salario)
+        resultado = funcionario.calcular_bonus()
+
+        if isinstance(contexto_expectativa, nullcontext):
+            assert resultado == esperado, f"Falhou no cenário: {motivo}"
