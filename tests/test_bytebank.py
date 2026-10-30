@@ -89,27 +89,27 @@ class TestFuncionario:
                 "Funcionário que recebe até mil reais tem direito ao bônus",
             ),
             (
+                10000,
                 1000,
-                100,
                 nullcontext(),
-                "Funcionário que recebe até mil reais tem direito ao bônus",
+                "Funcionário que recebe até 10 mil reais tem direito ao bônus",
             ),
             (
-                1500,
+                10001,
                 None,
                 pytest.raises(
                     ValueError, match="Salário não se enquadra no critério do bônus"
                 ),
-                "Funcionário que recebe acima de mil reais não tem direito ao bônus",
+                "Funcionário que recebe acima de 10 mil reais não tem direito ao bônus",
             ),
         ],
         ids=[
             "salario_800_recebe_bonus",
-            "salario_1000_recebe_bonus",
-            "salario_1500_nao_recebe_bonus",
+            "salario_10000_recebe_bonus",
+            "salario_10001_nao_recebe_bonus",
         ],
     )
-    def test_calcular_bonus(salario, esperado, contexto_expectativa, motivo):
+    def test_calcular_bonus(self, salario, esperado, contexto_expectativa, motivo):
         with contexto_expectativa:
             funcionario = Funcionario("Pessoa Teste", "10/05/1994", salario)
             resultado = funcionario.calcular_bonus()
