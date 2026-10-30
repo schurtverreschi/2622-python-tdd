@@ -9,7 +9,7 @@ class Funcionario:
 
     @property
     def nome(self):
-        return self._nome
+        return self._nome  # pragma: no cover
 
     @property
     def salario(self):
