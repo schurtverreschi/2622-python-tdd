@@ -54,7 +54,7 @@ class Funcionario:
 
     def calcular_bonus(self):
         valor = self._salario * 0.1
-        if self._salario > 10000:
+        if valor > 1000:
             raise ValueError("Salário não se enquadra no critério do bônus")
         return valor
 
